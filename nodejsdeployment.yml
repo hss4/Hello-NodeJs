@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: nodejs
+ labels:
+  name: nodejs
+spec:
+ replicas: 2
+ selector:
+  matchLabels:
+   name: nodejs
+ template:
+  metadata:
+   labels:
+    name: nodejs
+  spec:
+   containers:
+   - name: nodejs
+     image: sudharshan4/hellonodejs:1
+     ports:
+      - containerPort: 3000
+     resources:
+      requests:
+       cpu: "100m"
+       memory: "64Mi"
+      limits:
+       cpu: "100m"
+       memory: "256Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+ name: nodejsservice
+ labels:
+  name: nodejs
+spec:
+ type: NodePort
+ selector:
+  name: nodejs
+ ports:
+  - port: 80
+    targetPort: 3000
